@@ -234,7 +234,7 @@ functional_test() ->
     lager:log(warning, self(), "This should never be received"),
     lager:log(error, self(), "This is a test"),
 
-    {Res} = receive
+    Res = receive
         {data, Bin} ->
             jsx:decode(zlib:gunzip(Bin))
     after 500 ->

@@ -24,7 +24,7 @@ format(Message, Config, _Colors) ->
 
 format(Message, Config) ->
     Data = get_raw_data(Message, Config) ++ getvalue(extra_fields, Config, []),
-    Msg = jsx:encode({Data}),
+    Msg = jsx:encode(Data),
     <<Msg/binary,"\n">>.
 
 utc_iso_datetime(Message) ->
@@ -53,13 +53,13 @@ get_raw_data(Message, Config) ->
      {facility_label, list_to_binary(getvalue(facility, Config, "user-level"))},
      {'application', list_to_binary(atom_to_list(getvalue(application, MetaData)))},
 
-     {erlang, {[
+     {erlang, [
          {line, getvalue(line, MetaData, -1)},
          {file, list_to_binary(atom_to_list(getvalue(module, MetaData)))},
          {'from_pid', get_pid(getvalue(pid, MetaData))},
          {'node', list_to_binary(atom_to_list(getvalue(node, MetaData)))},
          {'module', list_to_binary(atom_to_list(getvalue(module, MetaData)))},
-         {'function', list_to_binary(atom_to_list(getvalue(function, MetaData)))}]}}].
+         {'function', list_to_binary(atom_to_list(getvalue(function, MetaData)))}] }].
 
 
 get_pid(Pid) when is_pid(Pid) ->
@@ -166,13 +166,13 @@ get_raw_data_test() ->
                 {host, <<"localhost">>},
                 {facility_label, <<"user-level">>},
                 {'application', <<"lager_graylog_backend">>},
-                {erlang, {[
+                {erlang, [
                     {line, -1},
                     {file, <<"undefined">>},
                     {'from_pid', <<"unknown">>},
                     {'node', <<"undefined">>},
                     {'module', <<"undefined">>},
-                    {'function', <<"undefined">>}]}}
+                    {'function', <<"undefined">>}] }
                ],
 
     ?assertEqual(Expected, Data).
@@ -193,13 +193,13 @@ format_2_test() ->
                               {host, <<"localhost">>},
                               {facility_label, <<"user-level">>},
                               {'application', <<"lager_graylog_backend">>},
-                              {erlang, {[
+                              {erlang, [
                                   {line, -1},
                                   {file, <<"undefined">>},
                                   {'from_pid', <<"unknown">>},
                                   {'node', <<"undefined">>},
                                   {'module', <<"undefined">>},
-                                  {'function', <<"undefined">>}]}}
+                                  {'function', <<"undefined">>}] }
                              ]),
 
     ?assertEqual(<<Expected/binary,"\n">>, Data).
@@ -219,13 +219,13 @@ format_3_test() ->
                               {host, <<"localhost">>},
                               {facility_label, <<"user-level">>},
                               {'application', <<"lager_graylog_backend">>},
-                              {erlang, {[
+                              {erlang, [
                                   {line, -1},
                                   {file, <<"undefined">>},
                                   {'from_pid', <<"unknown">>},
                                   {'node', <<"undefined">>},
                                   {'module', <<"undefined">>},
-                                  {'function', <<"undefined">>}]}}
+                                  {'function', <<"undefined">>}] }
                              ]),
 
     ?assertEqual(<<Expected/binary,"\n">>, Data).
@@ -250,13 +250,13 @@ format_2_with_extra_fields_test() ->
                               {host, <<"localhost">>},
                               {facility_label, <<"lager-test">>},
                               {'application', <<"lager_graylog_backend">>},
-                              {erlang, {[
+                              {erlang, [
                                   {line, -1},
                                   {file, <<"undefined">>},
                                   {'from_pid', <<"unknown">>},
                                   {'node', <<"undefined">>},
                                   {'module', <<"undefined">>},
-                                  {'function', <<"undefined">>}]}},
+                                  {'function', <<"undefined">>}] },
                               {'extra', <<"test">>}
                              ]),
 
