@@ -24,7 +24,7 @@ format(Message, Config, _Colors) ->
 
 format(Message, Config) ->
     Data = get_raw_data(Message, Config) ++ getvalue(extra_fields, Config, []),
-    Msg = jiffy:encode({Data}),
+    Msg = jsx:encode({Data}),
     <<Msg/binary,"\n">>.
 
 utc_iso_datetime(Message) ->
@@ -186,7 +186,7 @@ format_2_test() ->
     Message = lager_msg:new("a message", Now, info, MD, []),
     Data = format(Message, Cfg),
 
-    Expected = jiffy:encode({[{'@version', <<"1">>},
+    Expected = jsx:encode([{'@version', <<"1">>},
                               {severity_label, <<"informational">>},
                               {message, <<"a message">>},
                               {'@timestamp', utc_iso_datetime(Message)},
@@ -200,7 +200,7 @@ format_2_test() ->
                                   {'node', <<"undefined">>},
                                   {'module', <<"undefined">>},
                                   {'function', <<"undefined">>}]}}
-                             ]}),
+                             ]),
 
     ?assertEqual(<<Expected/binary,"\n">>, Data).
 
@@ -212,7 +212,7 @@ format_3_test() ->
     Message = lager_msg:new("a message", Now, info, MD, []),
     Data = format(Message, Cfg, []),
 
-    Expected = jiffy:encode({[{'@version', <<"1">>},
+    Expected = jsx:encode([{'@version', <<"1">>},
                               {severity_label, <<"informational">>},
                               {message, <<"a message">>},
                               {'@timestamp', utc_iso_datetime(Message)},
@@ -226,7 +226,7 @@ format_3_test() ->
                                   {'node', <<"undefined">>},
                                   {'module', <<"undefined">>},
                                   {'function', <<"undefined">>}]}}
-                             ]}),
+                             ]),
 
     ?assertEqual(<<Expected/binary,"\n">>, Data).
 
@@ -243,7 +243,7 @@ format_2_with_extra_fields_test() ->
     Message = lager_msg:new("a message", Now, info, MD, []),
     Data = format(Message, Cfg),
 
-    Expected = jiffy:encode({[{'@version', <<"1">>},
+    Expected = jsx:encode([{'@version', <<"1">>},
                               {severity_label, <<"informational">>},
                               {message, <<"a message">>},
                               {'@timestamp', utc_iso_datetime(Message)},
@@ -258,7 +258,7 @@ format_2_with_extra_fields_test() ->
                                   {'module', <<"undefined">>},
                                   {'function', <<"undefined">>}]}},
                               {'extra', <<"test">>}
-                             ]}),
+                             ]),
 
     ?assertEqual(<<Expected/binary,"\n">>, Data).
 

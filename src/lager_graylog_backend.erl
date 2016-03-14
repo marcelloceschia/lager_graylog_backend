@@ -236,7 +236,7 @@ functional_test() ->
 
     {Res} = receive
         {data, Bin} ->
-            jiffy:decode(zlib:gunzip(Bin))
+            jsx:decode(zlib:gunzip(Bin))
     after 500 ->
             {error, message_not_received}
     end,

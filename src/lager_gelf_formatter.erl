@@ -24,7 +24,7 @@ format(Message, Config, _Colors) ->
 
 format(Message, Config) ->
     Data = get_raw_data(Message, Config) ++ getvalue(extra_fields, Config, []),
-    Json = jiffy:encode({Data}),
+    Json = jsx:encode(Data),
     compressed(Json, getvalue(compression, Config, gzip)).
 
 get_raw_data(Message, Config) ->
@@ -219,7 +219,7 @@ format_2_test() ->
     Message = lager_msg:new("a long message", Now, info, MD, []),
     Data = format(Message, Cfg),
 
-    Expected = jiffy:encode({[{version, <<"1.0">>},
+    Expected = jsx:encode([{version, <<"1.0">>},
                               {level, 6},
                               {short_message, <<"a long">>},
                               {full_message, <<"a long message">>},
@@ -233,7 +233,7 @@ format_2_test() ->
                               {'_application', <<"lager_graylog_backend">>},
                               {'_module', <<"undefined">>},
                               {'_function', <<"undefined">>}
-                             ]}),
+                             ]),
 
     ?assertEqual(Expected, Data).
 
@@ -247,7 +247,7 @@ format_3_test() ->
     Message = lager_msg:new("a long message", Now, info, MD, []),
     Data = format(Message, Cfg, []),
 
-    Expected = jiffy:encode({[{version, <<"1.0">>},
+    Expected = jsx:encode([{version, <<"1.0">>},
                               {level, 6},
                               {short_message, <<"a long">>},
                               {full_message, <<"a long message">>},
@@ -261,7 +261,7 @@ format_3_test() ->
                               {'_application', <<"lager_graylog_backend">>},
                               {'_module', <<"undefined">>},
                               {'_function', <<"undefined">>}
-                             ]}),
+                             ]),
 
     ?assertEqual(Expected, Data).
 
@@ -280,7 +280,7 @@ format_2_with_extra_fields_test() ->
     Message = lager_msg:new("a long message", Now, info, MD, []),
     Data = format(Message, Cfg),
 
-    Expected = jiffy:encode({[{version, <<"1.0">>},
+    Expected = jsx:encode([{version, <<"1.0">>},
                               {level, 6},
                               {short_message, <<"a long">>},
                               {full_message, <<"a long message">>},
@@ -295,7 +295,7 @@ format_2_with_extra_fields_test() ->
                               {'_module', <<"undefined">>},
                               {'_function', <<"undefined">>},
                               {'_environment', <<"test">>}
-                             ]}),
+                             ]),
 
     ?assertEqual(Expected, Data).
 
